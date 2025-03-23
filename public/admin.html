@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Massage Service Feedback - Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .dashboard-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .filters {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        select, button, input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .export-btn {
+            margin-top: 20px;
+        }
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .pagination button {
+            padding: 8px 12px;
+        }
+        .feedback-details {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .staff-rating {
+            display: flex;
+            gap: 15px;
+        }
+        .staff-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f2f2f2;
+            padding: 10px;
+            border-radius: 8px;
+            min-width: 120px;
+        }
+        .staff-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .no-data {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .edit-btn {
+            background-color: #2196F3;
+        }
+        .edit-btn:hover {
+            background-color: #0b7dda;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 70%;
+            max-width: 700px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-modal:hover {
+            color: #000;
+        }
+        .rating-select {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .rating-select select {
+            width: 60px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 100px;
+        }
+        .save-btn {
+            background-color: #4CAF50;
+            padding: 10px 15px;
+            margin-top: 10px;
+        }
+        .delete-confirm-modal {
+            text-align: center;
+        }
+        .delete-confirm-modal p {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        .confirm-delete-btn {
+            background-color: #f44336;
+            margin-right: 10px;
+        }
+        .cancel-delete-btn {
+            background-color: #9e9e9e;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Massage Service Feedback - Admin Dashboard</h1>
+        
+        <div class="filters">
+            <div>
+                <label for="dateFilter">Date Range:</label>
+                <select id="dateFilter">
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="satisfactionFilter">Satisfaction:</label>
+                <select id="satisfactionFilter">
+                    <option value="all">All Ratings</option>
+                    <option value="5">5 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="2">2 Stars</option>
+                    <option value="1">1 Star</option>
+                </select>
+            </div>
+            
+            <button id="refreshBtn">Refresh Data</button>
+        </div>
+        
+        <div id="feedbackResults">
+            <table id="feedbackTable">
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Satisfaction</th>
+                        <th>Recommend</th>
+                        <th>Staff Ratings</th>
+                        <th>Feedback</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="feedbackTableBody">
+                    <!-- Feedback data will be inserted here -->
+                </tbody>
+            </table>
+            <div id="noData" class="no-data" style="display: none;">
+                <p>No feedback data available. When customers submit feedback, it will appear here.</p>
+            </div>
+        </div>
+        
+        <div class="pagination">
+            <button id="prevPage">Previous</button>
+            <span id="pageInfo">Page 1 of 1</span>
+            <button id="nextPage">Next</button>
+        </div>
+        
+        <button id="exportBtn" class="export-btn">Export to CSV</button>
+    </div>
+
+    <!-- Edit Feedback Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Feedback</h2>
+            <form id="editFeedbackForm">
+                <input type="hidden" id="edit_feedback_id">
+                <div class="form-group">
+                    <label>Date & Time:</label>
+                    <input type="text" id="edit_timestamp" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Overall Satisfaction:</label>
+                    <div class="rating-select">
+                        <select id="edit_satisfaction">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <span>out of 5</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Would Recommend:</label>
+                    <select id="edit_recommend">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                        <option value="maybe">Maybe</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Staff Ratings:</label>
+                    <div class="staff-rating">
+                        <div class="staff-card">
+                            <div class="staff-name">Sarah Johnson</div>
+                            <select id="edit_staff1_rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="staff-card">
+                            <div class="staff-name">Michael Chen</div>
+                            <select id="edit_staff2_rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="staff-card">
+                            <div class="staff-name">Emily Rodriguez</div>
+                            <select id="edit_staff3_rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_feedback">Customer Feedback:</label>
+                    <textarea id="edit_feedback"></textarea>
+                </div>
+                <button type="button" class="save-btn" onclick="saveFeedbackChanges()">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content delete-confirm-modal">
+            <h2>Confirm Deletion</h2>
+            <p>Are you sure you want to delete this feedback? This action cannot be undone.</p>
+            <div>
+                <button class="confirm-delete-btn" onclick="confirmDelete()">Delete</button>
+                <button class="cancel-delete-btn" onclick="closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let feedbackData = [];
+            let currentPage = 1;
+            const itemsPerPage = 10;
+            let feedbackToDeleteId = null;
+            
+            // Initial data load
+            loadFeedbackData();
+            
+            // Event listeners
+            document.getElementById('refreshBtn').addEventListener('click', loadFeedbackData);
+            document.getElementById('dateFilter').addEventListener('change', filterAndDisplayData);
+            document.getElementById('satisfactionFilter').addEventListener('change', filterAndDisplayData);
+            document.getElementById('prevPage').addEventListener('click', goToPrevPage);
+            document.getElementById('nextPage').addEventListener('click', goToNextPage);
+            document.getElementById('exportBtn').addEventListener('click', exportToCSV);
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === document.getElementById('editModal')) {
+                    closeEditModal();
+                }
+                if (event.target === document.getElementById('deleteModal')) {
+                    closeDeleteModal();
+                }
+            });
+            
+            function loadFeedbackData() {
+                // In a real application, this would be an API call
+                // For this example, we'll use some sample data
+                
+                
+                
+                fetch('/api/feedback')
+                    .then(response => response.json())
+                    .then(data => {
+                        feedbackData = data;
+                        filterAndDisplayData();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching feedback data:', error);
+                    });
+                
+                
+                
+            }
+            
+            function filterAndDisplayData() {
+                const dateFilter = document.getElementById('dateFilter').value;
+                const satisfactionFilter = document.getElementById('satisfactionFilter').value;
+                
+                let filteredData = [...feedbackData];
+                
+                // Apply date filter
+                if (dateFilter !== 'all') {
+                    const today = new Date();
+                    const startDate = new Date();
+                    
+                    if (dateFilter === 'today') {
+                        startDate.setHours(0, 0, 0, 0);
+                    } else if (dateFilter === 'week') {
+                        startDate.setDate(today.getDate() - 7);
+                    } else if (dateFilter === 'month') {
+                        startDate.setMonth(today.getMonth() - 1);
+                    }
+                    
+                    filteredData = filteredData.filter(item => {
+                        const itemDate = new Date(item.timestamp);
+                        return itemDate >= startDate;
+                    });
+                }
+                
+                // Apply satisfaction filter
+                if (satisfactionFilter !== 'all') {
+                    filteredData = filteredData.filter(item => item.satisfaction === satisfactionFilter);
+                }
+                
+                // Sort by most recent
+                filteredData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                // Update pagination
+                const totalPages = Math.max(1, Math.ceil(filteredData.length / itemsPerPage));
+                if (currentPage > totalPages) {
+                    currentPage = totalPages;
+                }
+                document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+                
+                // Apply pagination
+                const start = (currentPage - 1) * itemsPerPage;
+                const paginatedData = filteredData.slice(start, start + itemsPerPage);
+                
+                displayFeedbackData(paginatedData);
+            }
+            
+            function displayFeedbackData(data) {
+                const tableBody = document.getElementById('feedbackTableBody');
+                const noDataDiv = document.getElementById('noData');
+                
+                tableBody.innerHTML = '';
+                
+                if (data.length === 0) {
+                    document.getElementById('feedbackTable').style.display = 'none';
+                    noDataDiv.style.display = 'block';
+                    return;
+                }
+                
+                document.getElementById('feedbackTable').style.display = 'table';
+                noDataDiv.style.display = 'none';
+                
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    
+                    // Format date
+                    const date = new Date(item.timestamp);
+                    const formattedDate = date.toLocaleString();
+                    
+                    // Staff ratings
+                    const staffRatings = `
+                        <div class="staff-rating">
+                            <div class="staff-card">
+                                <div class="staff-name">Sarah Johnson</div>
+                                <div>${item.staff1_rating}/5</div>
+                            </div>
+                            <div class="staff-card">
+                                <div class="staff-name">Michael Chen</div>
+                                <div>${item.staff2_rating}/5</div>
+                            </div>
+                            <div class="staff-card">
+                                <div class="staff-name">Emily Rodriguez</div>
+                                <div>${item.staff3_rating}/5</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Action buttons
+                    const actionButtons = `
+                        <div class="action-buttons">
+                            <button class="edit-btn" onclick="openEditModal(${item.id})">Edit</button>
+                            <button class="delete-btn" onclick="openDeleteModal(${item.id})">Delete</button>
+                        </div>
+                    `;
+                    
+                    row.innerHTML = `
+                        <td>${formattedDate}</td>
+                        <td>${item.satisfaction}/5</td>
+                        <td>${item.recommend}</td>
+                        <td>${staffRatings}</td>
+                        <td>${item.feedback || "<em>No feedback provided</em>"}</td>
+                        <td>${actionButtons}</td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            function goToPrevPage() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    filterAndDisplayData();
+                }
+            }
+            
+            function goToNextPage() {
+                const totalPages = Math.ceil(feedbackData.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    filterAndDisplayData();
+                }
+            }
+            
+            function exportToCSV() {
+                // Prepare CSV data
+                let csvContent = "data:text/csv;charset=utf-8,";
+                
+                // Add headers
+                csvContent += "Date,Satisfaction,Recommend,Sarah Rating,Michael Rating,Emily Rating,Feedback\n";
+                
+                // Add data rows
+                feedbackData.forEach(item => {
+                    const row = [
+                        item.timestamp,
+                        item.satisfaction,
+                        item.recommend,
+                        item.staff1_rating,
+                        item.staff2_rating,
+                        item.staff3_rating,
+                        `"${(item.feedback || "").replace(/"/g, '""')}"`
+                    ];
+                    csvContent += row.join(",") + "\n";
+                });
+                
+                // Create download link
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "feedback_data.csv");
+                document.body.appendChild(link);
+                
+                // Trigger download
+                link.click();
+                document.body.removeChild(link);
+            }
+            
+            // Make these functions globally available
+            window.openEditModal = function(id) {
+                const feedback = feedbackData.find(item => item.id === id);
+                if (!feedback) return;
+                
+                // Populate form fields
+                document.getElementById('edit_feedback_id').value = feedback.id;
+                document.getElementById('edit_timestamp').value = new Date(feedback.timestamp).toLocaleString();
+                document.getElementById('edit_satisfaction').value = feedback.satisfaction;
+                document.getElementById('edit_recommend').value = feedback.recommend;
+                document.getElementById('edit_staff1_rating').value = feedback.staff1_rating;
+                document.getElementById('edit_staff2_rating').value = feedback.staff2_rating;
+                document.getElementById('edit_staff3_rating').value = feedback.staff3_rating;
+                document.getElementById('edit_feedback').value = feedback.feedback || '';
+                
+                // Show modal
+                document.getElementById('editModal').style.display = 'block';
+            };
+            
+            window.closeEditModal = function() {
+                document.getElementById('editModal').style.display = 'none';
+            };
+            
+            window.saveFeedbackChanges = function() {
+    const id = parseInt(document.getElementById('edit_feedback_id').value);
+    const satisfaction = document.getElementById('edit_satisfaction').value;
+    const recommend = document.getElementById('edit_recommend').value;
+    const staff1_rating = document.getElementById('edit_staff1_rating').value;
+    const staff2_rating = document.getElementById('edit_staff2_rating').value;
+    const staff3_rating = document.getElementById('edit_staff3_rating').value;
+    const feedback = document.getElementById('edit_feedback').value;
+
+    fetch(`/api/feedback/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ satisfaction, recommend, staff1_rating, staff2_rating, staff3_rating, feedback })
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            const index = feedbackData.findIndex(item => item.id === id);
+            if (index !== -1) {
+                feedbackData[index] = { 
+                    ...feedbackData[index], 
+                    satisfaction, 
+                    recommend, 
+                    staff1_rating, 
+                    staff2_rating, 
+                    staff3_rating, 
+                    feedback 
+                };
+            }
+            closeEditModal();
+            filterAndDisplayData();
+            alert('Feedback updated successfully!');
+        } else {
+            throw new Error(result.message || 'Server update failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating feedback:', error);
+        alert('Error updating feedback.');
+    });
+};
+            
+            window.confirmDelete = function() {
+    if (feedbackToDeleteId === null) return;
+
+    fetch(`/api/feedback/${feedbackToDeleteId}`, { method: 'DELETE' })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            feedbackData = feedbackData.filter(item => item.id !== feedbackToDeleteId);
+            closeDeleteModal();
+            filterAndDisplayData();
+            alert('Feedback deleted successfully!');
+        } else {
+            throw new Error(result.message || 'Server delete failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting feedback:', error);
+        alert('Error deleting feedback.');
+    });
+
+    feedbackToDeleteId = null;
+};
+        });
+    </script>
+</body>
+</html>
