@@ -192,7 +192,7 @@
 <body>
     <div class="dashboard-container">
         <h1>Massage Service Feedback - Admin Dashboard</h1>
-        
+        <button class="logout-btn" onclick="logout()">Logout</button>
         <div class="filters">
             <div>
                 <label for="dateFilter">Date Range:</label>
@@ -338,6 +338,9 @@
     </div>
 
     <script>
+        function logout() {
+    window.location.href = '/';
+            }
         document.addEventListener('DOMContentLoaded', function() {
             let feedbackData = [];
             let currentPage = 1;
@@ -581,20 +584,8 @@
     .then(response => response.json())
     .then(result => {
         if (result.success) {
-            const index = feedbackData.findIndex(item => item.id === id);
-            if (index !== -1) {
-                feedbackData[index] = { 
-                    ...feedbackData[index], 
-                    satisfaction, 
-                    recommend, 
-                    staff1_rating, 
-                    staff2_rating, 
-                    staff3_rating, 
-                    feedback 
-                };
-            }
+            loadFeedbackData(); // Refresh data after update
             closeEditModal();
-            filterAndDisplayData();
             alert('Feedback updated successfully!');
         } else {
             throw new Error(result.message || 'Server update failed');
@@ -618,40 +609,28 @@
             };
             
             window.confirmDelete = function() {
-                if (feedbackToDeleteId === null) return;
-                
-                // Find and remove the feedback item
-                const index = feedbackData.findIndex(item => item.id === feedbackToDeleteId);
-                if (index !== -1) {
-                    feedbackData.splice(index, 1);
-                    
-                  
-                    fetch(`/api/feedback/${feedbackToDeleteId}`, {
-                        method: 'DELETE'
-                    })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            closeDeleteModal();
-                            filterAndDisplayData();
-                        } else {
-                            alert('Error deleting feedback.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error deleting feedback:', error);
-                        alert('Error deleting feedback.');
-                    });
-                    
-                    
-                    // Close modal and refresh display
-                    closeDeleteModal();
-                    filterAndDisplayData();
-                    alert('Feedback deleted successfully!');
-                }
-                
-                feedbackToDeleteId = null;
-            };
+    if (feedbackToDeleteId === null) return;
+    
+    fetch(`/api/feedback/${feedbackToDeleteId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            loadFeedbackData(); // Refresh data after delete
+            closeDeleteModal();
+            alert('Feedback deleted successfully!');
+        } else {
+            alert('Error deleting feedback.');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting feedback:', error);
+        alert('Error deleting feedback.');
+    });
+    
+    feedbackToDeleteId = null;
+};
         });
     </script>
 </body>

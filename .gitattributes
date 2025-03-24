@@ -1,0 +1,10 @@
+# Ensure package-lock.json uses LF line endings everywhere
+package-lock.json text eol=lf
+
+# Ensure other text files (e.g., .js, .html) use native line endings
+*.js text eol=native
+*.html text eol=native
+
+# Binary files should not have line ending conversion
+*.png binary
+*.jpg binary

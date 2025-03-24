@@ -170,6 +170,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-bottom: 20px;
         }
         .logout-btn:hover {
             background-color: #d32f2f;
@@ -373,61 +374,7 @@
     </div>
 
     <!-- Admin Dashboard -->
-    <div id="adminDashboard" class="admin-dashboard">
-        <div class="dashboard-header">
-            <h2 class="dashboard-title">Admin Dashboard - Feedback Management</h2>
-            <button class="logout-btn" onclick="logout()">Logout</button>
-        </div>
-        
-        <div class="stats-container">
-            <div class="stat-card">
-                <div>Total Feedbacks</div>
-                <div class="stat-value">28</div>
-            </div>
-            <div class="stat-card">
-                <div>Average Rating</div>
-                <div class="stat-value">4.2</div>
-            </div>
-            <div class="stat-card">
-                <div>Recommend Rate</div>
-                <div class="stat-value">86%</div>
-            </div>
-        </div>
-        
-        <h3>Recent Feedback</h3>
-        <div class="feedback-list">
-            <div class="feedback-header">
-                <div>Date</div>
-                <div>Rating</div>
-                <div>Staff Member</div>
-            </div>
-            <div class="feedback-item">
-                <div>2025-03-10</div>
-                <div>5/5</div>
-                <div>Sarah Johnson</div>
-            </div>
-            <div class="feedback-item">
-                <div>2025-03-09</div>
-                <div>4/5</div>
-                <div>Michael Chen</div>
-            </div>
-            <div class="feedback-item">
-                <div>2025-03-09</div>
-                <div>3/5</div>
-                <div>Emily Rodriguez</div>
-            </div>
-            <div class="feedback-item">
-                <div>2025-03-08</div>
-                <div>5/5</div>
-                <div>Sarah Johnson</div>
-            </div>
-            <div class="feedback-item">
-                <div>2025-03-08</div>
-                <div>4/5</div>
-                <div>Michael Chen</div>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- Feedback Form -->
     <div id="feedbackForm" class="form-container">
@@ -560,33 +507,29 @@
         }
 
         function handleAdminLogin(event) {
-            event.preventDefault();
-            const password = document.getElementById('password').value;
-            
-            // Check if password is correct (1234)
-            if (password === "1234") {
-                // Show success message
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('errorMessage').style.display = 'none';
-                
-                // Wait 1 second then show admin dashboard
-                setTimeout(function() {
-                    closeAdminLogin();
-                    document.getElementById('adminDashboard').style.display = 'block';
-                    document.getElementById('selectionPage').style.display = 'none';
-                }, 1000);
-            } else {
-                // Show error message
-                document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('successMessage').style.display = 'none';
-            }
-        }
+    event.preventDefault();
+    const password = document.getElementById('password').value;
+    
+    if (password === "1234") {
+        // Show success message
+        document.getElementById('successMessage').style.display = 'block';
+        document.getElementById('errorMessage').style.display = 'none';
+        
+        // Redirect to admin.html after 1 second
+        setTimeout(function() {
+            window.location.href = '/admin.html';
+        }, 1000);
+    } else {
+        // Show error message
+        document.getElementById('errorMessage').style.display = 'block';
+        document.getElementById('successMessage').style.display = 'none';
+    }
+}
 
         // Function to logout from admin dashboard
         function logout() {
-            document.getElementById('adminDashboard').style.display = 'none';
-            document.getElementById('selectionPage').style.display = 'block';
-        }
+    window.location.href = '/';
+}
 
         // Function to handle language change
         function changeLanguage(lang) {
@@ -678,64 +621,49 @@
 
         // Handle feedback form submission
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('evaluationForm');
-            const successMessage = document.getElementById('feedbackSuccessMessage');
-            
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                
-                // Collect form data
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData);
-                
-                // In this demo, we'll just simulate a successful submission
-                // Show success message
-                successMessage.style.display = 'block';
-                // Reset form
-                form.reset();
-                // Scroll to top
-                window.scrollTo(0, 0);
-                
-                // Hide success message after 5 seconds and go back to selection page
-                setTimeout(() => {
-                    successMessage.style.display = 'none';
-                    backToSelection();
-                }, 5000);
-                
-                
-                fetch('http://localhost:3000/api/feedback', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        // Show success message
-                        successMessage.style.display = 'block';
-                        // Reset form
-                        form.reset();
-                        // Scroll to top
-                        window.scrollTo(0, 0);
-                        
-                        // Hide success message after 5 seconds
-                        setTimeout(() => {
-                            successMessage.style.display = 'none';
-                            backToSelection();
-                        }, 5000);
-                    } else {
-                        alert('There was an error submitting your feedback. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error submitting feedback:', error);
-                    alert('There was an error submitting your feedback. Please try again.');
-                });
-                
-            });
-        });
+    const form = document.getElementById('evaluationForm');
+    const successMessage = document.getElementById('feedbackSuccessMessage');
+    
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Collect form data
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+        
+        // Submit to server
+        fetch('/api/feedback', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+})
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(response => {
+    console.log('Server response:', response.status, response.statusText);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json();
+})
+.then(result => {
+    console.log('Server result:', result);
+    if (result.success) {
+        // ... success logic ...
+    } else {
+        alert('Error from server: ' + (result.message || 'Unknown error'));
+    }
+})
+.catch(error => {
+    console.error('Fetch error:', error);
+    alert('There was an error submitting your feedback. Please try again.');
+});
+    });
+});
     </script>
 </body>
 </html>
