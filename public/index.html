@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    const supabaseUrl = 'https://bdihqgqujzvywyyfexlh.supabase.com'; 
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkaWhxZ3F1anp2eXd5eWZleGxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI1NDgxMTAsImV4cCI6MjA1ODEyNDExMH0.hoOfLZ8bVma9T_XF6tJRuFCT-E0aUaH6t-y69U9X-Rg'; // Replace with your Supabase Anon Key
+    const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Massage Service - Welcome</title>
@@ -643,47 +648,48 @@
 
         // Handle feedback form submission
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('evaluationForm');
-            const successMessage = document.getElementById('feedbackSuccessMessage');
-            
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                
-                // Collect form data
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData);
-                
-                // Submit to server
-                fetch('/api/feedback', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(result => {
-                    console.log('Server result:', result);
-                    if (result.success) {
-                        successMessage.style.display = 'block';
-                        form.reset();
-                        setTimeout(() => {
-                            successMessage.style.display = 'none';
-                            backToSelection();
-                        }, 5000);
-                    } else {
-                        alert('Error from server: ' + (result.message || 'Unknown error'));
-                    }
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                    alert('There was an error submitting your feedback. Please try again.');
-                });
-            });
-        });
+    const form = document.getElementById('evaluationForm');
+    const successMessage = document.getElementById('feedbackSuccessMessage');
+
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        // Collect form data
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+
+        // Insert data into Supabase
+        const { error } = await supabase
+            .from('feedback')
+            .insert([{
+                satisfaction: parseInt(data.satisfaction),
+                recommend: data.recommend,
+                staff1_rating: parseInt(data.staff1_rating),
+                staff2_rating: parseInt(data.staff2_rating),
+                staff3_rating: parseInt(data.staff3_rating),
+                staff4_rating: parseInt(data.staff4_rating),
+                staff5_rating: parseInt(data.staff5_rating),
+                staff6_rating: parseInt(data.staff6_rating),
+                staff7_rating: parseInt(data.staff7_rating),
+                staff8_rating: parseInt(data.staff8_rating),
+                staff9_rating: parseInt(data.staff9_rating),
+                staff10_rating: parseInt(data.staff10_rating),
+                feedback: data.feedback || null
+            }]);
+
+        if (error) {
+            console.error('Error submitting feedback:', error);
+            alert('There was an error submitting your feedback. Please try again.');
+        } else {
+            successMessage.style.display = 'block';
+            form.reset();
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+                backToSelection();
+            }, 5000);
+        }
+    });
+});
     </script>
     <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'925387144c8706f8',t:'MTc0Mjc5MTYxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>

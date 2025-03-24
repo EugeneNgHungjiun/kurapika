@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    const supabaseUrl = 'https://bdihqgqujzvywyyfexlh.supabase.com'; 
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkaWhxZ3F1anp2eXd5eWZleGxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI1NDgxMTAsImV4cCI6MjA1ODEyNDExMH0.hoOfLZ8bVma9T_XF6tJRuFCT-E0aUaH6t-y69U9X-Rg'; // Replace with your Supabase Anon Key
+    const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Massage Service Feedback - Admin Dashboard</title>
@@ -431,17 +436,19 @@
                 }
             });
             
-            function loadFeedbackData() {
-                fetch('/api/feedback')
-                    .then(response => response.json())
-                    .then(data => {
-                        feedbackData = data;
-                        filterAndDisplayData();
-                    })
-                    .catch(error => {
-                        console.error('Error fetching feedback data:', error);
-                    });
-            }
+            async function loadFeedbackData() {
+    const { data, error } = await supabase
+        .from('feedback')
+        .select('*')
+        .order('timestamp', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching feedback data:', error);
+    } else {
+        feedbackData = data;
+        filterAndDisplayData();
+    }
+}
             
             function filterAndDisplayData() {
                 const dateFilter = document.getElementById('dateFilter').value;
@@ -651,57 +658,50 @@
                 document.getElementById('editModal').style.display = 'none';
             };
             
-            window.saveFeedbackChanges = function() {
-                const id = parseInt(document.getElementById('edit_feedback_id').value);
-                const satisfaction = document.getElementById('edit_satisfaction').value;
-                const recommend = document.getElementById('edit_recommend').value;
-                const staff1_rating = document.getElementById('edit_staff1_rating').value;
-                const staff2_rating = document.getElementById('edit_staff2_rating').value;
-                const staff3_rating = document.getElementById('edit_staff3_rating').value;
-                const staff4_rating = document.getElementById('edit_staff4_rating').value;
-                const staff5_rating = document.getElementById('edit_staff5_rating').value;
-                const staff6_rating = document.getElementById('edit_staff6_rating').value;
-                const staff7_rating = document.getElementById('edit_staff7_rating').value;
-                const staff8_rating = document.getElementById('edit_staff8_rating').value;
-                const staff9_rating = document.getElementById('edit_staff9_rating').value;
-                const staff10_rating = document.getElementById('edit_staff10_rating').value;
-                const feedback = document.getElementById('edit_feedback').value;
+            wwindow.saveFeedbackChanges = async function() {
+    const id = parseInt(document.getElementById('edit_feedback_id').value);
+    const satisfaction = document.getElementById('edit_satisfaction').value;
+    const recommend = document.getElementById('edit_recommend').value;
+    const staff1_rating = document.getElementById('edit_staff1_rating').value;
+    const staff2_rating = document.getElementById('edit_staff2_rating').value;
+    const staff3_rating = document.getElementById('edit_staff3_rating').value;
+    const staff4_rating = document.getElementById('edit_staff4_rating').value;
+    const staff5_rating = document.getElementById('edit_staff5_rating').value;
+    const staff6_rating = document.getElementById('edit_staff6_rating').value;
+    const staff7_rating = document.getElementById('edit_staff7_rating').value;
+    const staff8_rating = document.getElementById('edit_staff8_rating').value;
+    const staff9_rating = document.getElementById('edit_staff9_rating').value;
+    const staff10_rating = document.getElementById('edit_staff10_rating').value;
+    const feedback = document.getElementById('edit_feedback').value;
 
-                fetch(`/api/feedback/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        satisfaction, 
-                        recommend, 
-                        staff1_rating, 
-                        staff2_rating, 
-                        staff3_rating, 
-                        staff4_rating, 
-                        staff5_rating, 
-                        staff6_rating, 
-                        staff7_rating, 
-                        staff8_rating, 
-                        staff9_rating, 
-                        staff10_rating, 
-                        feedback 
-                    })
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        loadFeedbackData();
-                        closeEditModal();
-                        alert('Feedback updated successfully!');
-                    } else {
-                        throw new Error(result.message || 'Server update failed');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error updating feedback:', error);
-                    alert('Error updating feedback.');
-                });
-            };
-            
+    const { error } = await supabase
+        .from('feedback')
+        .update({
+            satisfaction: parseInt(satisfaction),
+            recommend,
+            staff1_rating: parseInt(staff1_rating),
+            staff2_rating: parseInt(staff2_rating),
+            staff3_rating: parseInt(staff3_rating),
+            staff4_rating: parseInt(staff4_rating),
+            staff5_rating: parseInt(staff5_rating),
+            staff6_rating: parseInt(staff6_rating),
+            staff7_rating: parseInt(staff7_rating),
+            staff8_rating: parseInt(staff8_rating),
+            staff9_rating: parseInt(staff9_rating),
+            staff10_rating: parseInt(staff10_rating),
+            feedback: feedback || null
+        })
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error updating feedback:', error);
+        alert('Error updating feedback.');
+    } else {
+        loadFeedbackData();
+        closeEditModal();
+        alert('Feedback updated successfully!');
+    }
+};
             window.openDeleteModal = function(id) {
                 feedbackToDeleteId = id;
                 document.getElementById('deleteModal').style.display = 'block';
@@ -711,29 +711,25 @@
                 document.getElementById('deleteModal').style.display = 'none';
             };
             
-            window.confirmDelete = function() {
-                if (feedbackToDeleteId === null) return;
-                
-                fetch(`/api/feedback/${feedbackToDeleteId}`, {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        loadFeedbackData();
-                        closeDeleteModal();
-                        alert('Feedback deleted successfully!');
-                    } else {
-                        alert('Error deleting feedback.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error deleting feedback:', error);
-                    alert('Error deleting feedback.');
-                });
-                
-                feedbackToDeleteId = null;
-            };
+            window.confirmDelete = async function() {
+    if (feedbackToDeleteId === null) return;
+
+    const { error } = await supabase
+        .from('feedback')
+        .delete()
+        .eq('id', feedbackToDeleteId);
+
+    if (error) {
+        console.error('Error deleting feedback:', error);
+        alert('Error deleting feedback.');
+    } else {
+        loadFeedbackData();
+        closeDeleteModal();
+        alert('Feedback deleted successfully!');
+    }
+
+    feedbackToDeleteId = null;
+};
         });
     </script>
     <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92538fcce88c457d',t:'MTc0Mjc5MTk3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>

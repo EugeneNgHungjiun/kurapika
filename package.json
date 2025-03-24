@@ -3,15 +3,27 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "@vercel/kv": "^3.0.0",
     "body-parser": "^1.20.3",
     "express": "^4.21.2"
-  }
+  },
+  "devDependencies": {
+    "supabase": "^2.19.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EugeneNgHungjiun/kurapika.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EugeneNgHungjiun/kurapika/issues"
+  },
+  "homepage": "https://github.com/EugeneNgHungjiun/kurapika#readme",
+  "description": ""
 }
