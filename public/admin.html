@@ -605,29 +605,53 @@
         alert('Error updating feedback.');
     });
 };
+                    
+                    
+            
+            window.openDeleteModal = function(id) {
+                feedbackToDeleteId = id;
+                document.getElementById('deleteModal').style.display = 'block';
+            };
+            
+            window.closeDeleteModal = function() {
+                document.getElementById('deleteModal').style.display = 'none';
+            };
             
             window.confirmDelete = function() {
-    if (feedbackToDeleteId === null) return;
-
-    fetch(`/api/feedback/${feedbackToDeleteId}`, { method: 'DELETE' })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            feedbackData = feedbackData.filter(item => item.id !== feedbackToDeleteId);
-            closeDeleteModal();
-            filterAndDisplayData();
-            alert('Feedback deleted successfully!');
-        } else {
-            throw new Error(result.message || 'Server delete failed');
-        }
-    })
-    .catch(error => {
-        console.error('Error deleting feedback:', error);
-        alert('Error deleting feedback.');
-    });
-
-    feedbackToDeleteId = null;
-};
+                if (feedbackToDeleteId === null) return;
+                
+                // Find and remove the feedback item
+                const index = feedbackData.findIndex(item => item.id === feedbackToDeleteId);
+                if (index !== -1) {
+                    feedbackData.splice(index, 1);
+                    
+                  
+                    fetch(`/api/feedback/${feedbackToDeleteId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            closeDeleteModal();
+                            filterAndDisplayData();
+                        } else {
+                            alert('Error deleting feedback.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting feedback:', error);
+                        alert('Error deleting feedback.');
+                    });
+                    
+                    
+                    // Close modal and refresh display
+                    closeDeleteModal();
+                    filterAndDisplayData();
+                    alert('Feedback deleted successfully!');
+                }
+                
+                feedbackToDeleteId = null;
+            };
         });
     </script>
 </body>

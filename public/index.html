@@ -431,7 +431,7 @@
 
     <!-- Feedback Form -->
     <div id="feedbackForm" class="form-container">
-        <h1>Massage Service Feedback Questionnaire 按摩服务反馈问卷</h1>
+        <h1>Massage Service Feedback Questionnaire  按摩服务反馈问卷</h1>
         <div id="feedbackSuccessMessage" class="feedback-success-message">
             Thank you for your feedback! Your responses have been recorded.
         </div>
@@ -451,6 +451,7 @@
                     <label for="rating5">5</label>
                 </div>
             </div>
+
             <div class="question-group">
                 <label>Would you recommend our service to others?</label>
                 <div class="radio-option">
@@ -466,11 +467,12 @@
                     <span>Maybe</span>
                 </div>
             </div>
+
             <div class="question-group">
                 <label>Please rate our staff member who assisted you:</label>
                 <div class="staff-container">
                     <div class="staff-member">
-                        <img src="/api/placeholder/100/100" alt="Sarah Johnson" class="staff-image">
+                        <img src="http://localhost:3000/api/placeholder/100/100" alt="Sarah Johnson" class="staff-image">
                         <div class="staff-name">Sarah Johnson</div>
                         <div class="rating staff-rating">
                             <input type="radio" name="staff1_rating" id="staff1_1" value="1" required>
@@ -485,8 +487,9 @@
                             <label for="staff1_5">5</label>
                         </div>
                     </div>
+
                     <div class="staff-member">
-                        <img src="/api/placeholder/100/100" alt="Michael Chen" class="staff-image">
+                        <img src="http://localhost:3000/api/placeholder/100/100" alt="Michael Chen" class="staff-image">
                         <div class="staff-name">Michael Chen</div>
                         <div class="rating staff-rating">
                             <input type="radio" name="staff2_rating" id="staff2_1" value="1" required>
@@ -501,8 +504,9 @@
                             <label for="staff2_5">5</label>
                         </div>
                     </div>
+
                     <div class="staff-member">
-                        <img src="/api/placeholder/100/100" alt="Emily Rodriguez" class="staff-image">
+                        <img src="http://localhost:3000/api/placeholder/100/100" alt="Emily Rodriguez" class="staff-image">
                         <div class="staff-name">Emily Rodriguez</div>
                         <div class="rating staff-rating">
                             <input type="radio" name="staff3_rating" id="staff3_1" value="1" required>
@@ -519,10 +523,12 @@
                     </div>
                 </div>
             </div>
+
             <div class="question-group">
                 <label for="feedback">What could we do to improve our service?</label>
                 <textarea id="feedback" name="feedback" placeholder="Please share your thoughts..."></textarea>
             </div>
+
             <button type="submit">Submit Evaluation</button>
             <button type="button" class="back-button" onclick="backToSelection()">Back to Selection</button>
         </form>
@@ -559,12 +565,18 @@
             
             // Check if password is correct (1234)
             if (password === "1234") {
+                // Show success message
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('errorMessage').style.display = 'none';
-                setTimeout(() => {
-                    window.location.href = '/admin'; // Redirect to admin dashboard
+                
+                // Wait 1 second then show admin dashboard
+                setTimeout(function() {
+                    closeAdminLogin();
+                    document.getElementById('adminDashboard').style.display = 'block';
+                    document.getElementById('selectionPage').style.display = 'none';
                 }, 1000);
             } else {
+                // Show error message
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('successMessage').style.display = 'none';
             }
@@ -668,35 +680,60 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('evaluationForm');
             const successMessage = document.getElementById('feedbackSuccessMessage');
-
+            
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
+                
+                // Collect form data
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData);
-
-                fetch('/api/feedback', {
+                
+                // In this demo, we'll just simulate a successful submission
+                // Show success message
+                successMessage.style.display = 'block';
+                // Reset form
+                form.reset();
+                // Scroll to top
+                window.scrollTo(0, 0);
+                
+                // Hide success message after 5 seconds and go back to selection page
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                    backToSelection();
+                }, 5000);
+                
+                
+                fetch('http://localhost:3000/api/feedback', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(data)
                 })
                 .then(response => response.json())
                 .then(result => {
                     if (result.success) {
+                        // Show success message
                         successMessage.style.display = 'block';
+                        // Reset form
                         form.reset();
+                        // Scroll to top
                         window.scrollTo(0, 0);
+                        
+                        // Hide success message after 5 seconds
                         setTimeout(() => {
                             successMessage.style.display = 'none';
                             backToSelection();
                         }, 5000);
                     } else {
-                        alert('Error submitting feedback. Please try again.');
+                        alert('There was an error submitting your feedback. Please try again.');
                     }
                 })
                 .catch(error => {
                     console.error('Error submitting feedback:', error);
-                    alert('Error submitting feedback. Please try again.');
+                    alert('There was an error submitting your feedback. Please try again.');
                 });
+                
             });
         });
     </script>
