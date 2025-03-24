@@ -71,25 +71,19 @@
         .pagination button {
             padding: 8px 12px;
         }
-        .feedback-details {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 10px;
-            white-space: pre-wrap;
-        }
         .staff-rating {
-            display: flex;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columns for 10 items */
+            gap: 5px; /* Reduced gap for compactness */
         }
         .staff-card {
             display: flex;
             flex-direction: column;
             align-items: center;
             background: #f2f2f2;
-            padding: 10px;
+            padding: 5px; /* Reduced padding */
             border-radius: 8px;
-            min-width: 120px;
+            min-width: 60px; /* Smaller width */
         }
         .staff-name {
             font-weight: bold;
@@ -203,7 +197,6 @@
                     <option value="month">This Month</option>
                 </select>
             </div>
-            
             <div>
                 <label for="satisfactionFilter">Satisfaction:</label>
                 <select id="satisfactionFilter">
@@ -215,7 +208,6 @@
                     <option value="1">1 Star</option>
                 </select>
             </div>
-            
             <button id="refreshBtn">Refresh Data</button>
         </div>
         
@@ -285,7 +277,7 @@
                     <label>Staff Ratings:</label>
                     <div class="staff-rating">
                         <div class="staff-card">
-                            <div class="staff-name">Sarah Johnson</div>
+                            <div class="staff-name">Staff 1</div>
                             <select id="edit_staff1_rating">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -295,7 +287,7 @@
                             </select>
                         </div>
                         <div class="staff-card">
-                            <div class="staff-name">Michael Chen</div>
+                            <div class="staff-name">Staff 2</div>
                             <select id="edit_staff2_rating">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -305,8 +297,78 @@
                             </select>
                         </div>
                         <div class="staff-card">
-                            <div class="staff-name">Emily Rodriguez</div>
+                            <div class="staff-name">Staff 3</div>
                             <select id="edit_staff3_rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="staff-card">
+                            <div class="staff-name">Staff 4</div>
+                            <select id="edit_staff4_rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="staff-card">
+                            <div class="staff-name">Staff 5</div>
+                            <select id="edit_staff5_rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="staff-card">
+                            <div class="staff-name">Staff 6</div>
+                            <select id="edit_staff6_rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="staff-card">
+                            <div class="staff-name">Staff 7</div>
+                            <select id="edit_staff7_rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="staff-card">
+                            <div class="staff-name">Staff 8</div>
+                            <select id="edit_staff8_rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="staff-card">
+                            <div class="staff-name">Staff 9</div>
+                            <select id="edit_staff9_rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="staff-card">
+                            <div class="staff-name">Staff 10</div>
+                            <select id="edit_staff10_rating">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -339,8 +401,9 @@
 
     <script>
         function logout() {
-    window.location.href = '/';
-            }
+            window.location.href = '/';
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             let feedbackData = [];
             let currentPage = 1;
@@ -369,11 +432,6 @@
             });
             
             function loadFeedbackData() {
-                // In a real application, this would be an API call
-                // For this example, we'll use some sample data
-                
-                
-                
                 fetch('/api/feedback')
                     .then(response => response.json())
                     .then(data => {
@@ -383,9 +441,6 @@
                     .catch(error => {
                         console.error('Error fetching feedback data:', error);
                     });
-                
-                
-                
             }
             
             function filterAndDisplayData() {
@@ -453,29 +508,54 @@
                 data.forEach(item => {
                     const row = document.createElement('tr');
                     
-                    // Format date
                     const date = new Date(item.timestamp);
                     const formattedDate = date.toLocaleString();
                     
-                    // Staff ratings
                     const staffRatings = `
                         <div class="staff-rating">
                             <div class="staff-card">
-                                <div class="staff-name">Sarah Johnson</div>
+                                <div class="staff-name">Staff 1</div>
                                 <div>${item.staff1_rating}/5</div>
                             </div>
                             <div class="staff-card">
-                                <div class="staff-name">Michael Chen</div>
+                                <div class="staff-name">Staff 2</div>
                                 <div>${item.staff2_rating}/5</div>
                             </div>
                             <div class="staff-card">
-                                <div class="staff-name">Emily Rodriguez</div>
+                                <div class="staff-name">Staff 3</div>
                                 <div>${item.staff3_rating}/5</div>
+                            </div>
+                            <div class="staff-card">
+                                <div class="staff-name">Staff 4</div>
+                                <div>${item.staff4_rating}/5</div>
+                            </div>
+                            <div class="staff-card">
+                                <div class="staff-name">Staff 5</div>
+                                <div>${item.staff5_rating}/5</div>
+                            </div>
+                            <div class="staff-card">
+                                <div class="staff-name">Staff 6</div>
+                                <div>${item.staff6_rating}/5</div>
+                            </div>
+                            <div class="staff-card">
+                                <div class="staff-name">Staff 7</div>
+                                <div>${item.staff7_rating}/5</div>
+                            </div>
+                            <div class="staff-card">
+                                <div class="staff-name">Staff 8</div>
+                                <div>${item.staff8_rating}/5</div>
+                            </div>
+                            <div class="staff-card">
+                                <div class="staff-name">Staff 9</div>
+                                <div>${item.staff9_rating}/5</div>
+                            </div>
+                            <div class="staff-card">
+                                <div class="staff-name">Staff 10</div>
+                                <div>${item.staff10_rating}/5</div>
                             </div>
                         </div>
                     `;
                     
-                    // Action buttons
                     const actionButtons = `
                         <div class="action-buttons">
                             <button class="edit-btn" onclick="openEditModal(${item.id})">Edit</button>
@@ -512,13 +592,9 @@
             }
             
             function exportToCSV() {
-                // Prepare CSV data
                 let csvContent = "data:text/csv;charset=utf-8,";
+                csvContent += "Date,Satisfaction,Recommend,Staff 1 Rating,Staff 2 Rating,Staff 3 Rating,Staff 4 Rating,Staff 5 Rating,Staff 6 Rating,Staff 7 Rating,Staff 8 Rating,Staff 9 Rating,Staff 10 Rating,Feedback\n";
                 
-                // Add headers
-                csvContent += "Date,Satisfaction,Recommend,Sarah Rating,Michael Rating,Emily Rating,Feedback\n";
-                
-                // Add data rows
                 feedbackData.forEach(item => {
                     const row = [
                         item.timestamp,
@@ -527,29 +603,31 @@
                         item.staff1_rating,
                         item.staff2_rating,
                         item.staff3_rating,
+                        item.staff4_rating,
+                        item.staff5_rating,
+                        item.staff6_rating,
+                        item.staff7_rating,
+                        item.staff8_rating,
+                        item.staff9_rating,
+                        item.staff10_rating,
                         `"${(item.feedback || "").replace(/"/g, '""')}"`
                     ];
                     csvContent += row.join(",") + "\n";
                 });
                 
-                // Create download link
                 const encodedUri = encodeURI(csvContent);
                 const link = document.createElement("a");
                 link.setAttribute("href", encodedUri);
                 link.setAttribute("download", "feedback_data.csv");
                 document.body.appendChild(link);
-                
-                // Trigger download
                 link.click();
                 document.body.removeChild(link);
             }
             
-            // Make these functions globally available
             window.openEditModal = function(id) {
                 const feedback = feedbackData.find(item => item.id === id);
                 if (!feedback) return;
                 
-                // Populate form fields
                 document.getElementById('edit_feedback_id').value = feedback.id;
                 document.getElementById('edit_timestamp').value = new Date(feedback.timestamp).toLocaleString();
                 document.getElementById('edit_satisfaction').value = feedback.satisfaction;
@@ -557,9 +635,15 @@
                 document.getElementById('edit_staff1_rating').value = feedback.staff1_rating;
                 document.getElementById('edit_staff2_rating').value = feedback.staff2_rating;
                 document.getElementById('edit_staff3_rating').value = feedback.staff3_rating;
+                document.getElementById('edit_staff4_rating').value = feedback.staff4_rating;
+                document.getElementById('edit_staff5_rating').value = feedback.staff5_rating;
+                document.getElementById('edit_staff6_rating').value = feedback.staff6_rating;
+                document.getElementById('edit_staff7_rating').value = feedback.staff7_rating;
+                document.getElementById('edit_staff8_rating').value = feedback.staff8_rating;
+                document.getElementById('edit_staff9_rating').value = feedback.staff9_rating;
+                document.getElementById('edit_staff10_rating').value = feedback.staff10_rating;
                 document.getElementById('edit_feedback').value = feedback.feedback || '';
                 
-                // Show modal
                 document.getElementById('editModal').style.display = 'block';
             };
             
@@ -568,36 +652,55 @@
             };
             
             window.saveFeedbackChanges = function() {
-    const id = parseInt(document.getElementById('edit_feedback_id').value);
-    const satisfaction = document.getElementById('edit_satisfaction').value;
-    const recommend = document.getElementById('edit_recommend').value;
-    const staff1_rating = document.getElementById('edit_staff1_rating').value;
-    const staff2_rating = document.getElementById('edit_staff2_rating').value;
-    const staff3_rating = document.getElementById('edit_staff3_rating').value;
-    const feedback = document.getElementById('edit_feedback').value;
+                const id = parseInt(document.getElementById('edit_feedback_id').value);
+                const satisfaction = document.getElementById('edit_satisfaction').value;
+                const recommend = document.getElementById('edit_recommend').value;
+                const staff1_rating = document.getElementById('edit_staff1_rating').value;
+                const staff2_rating = document.getElementById('edit_staff2_rating').value;
+                const staff3_rating = document.getElementById('edit_staff3_rating').value;
+                const staff4_rating = document.getElementById('edit_staff4_rating').value;
+                const staff5_rating = document.getElementById('edit_staff5_rating').value;
+                const staff6_rating = document.getElementById('edit_staff6_rating').value;
+                const staff7_rating = document.getElementById('edit_staff7_rating').value;
+                const staff8_rating = document.getElementById('edit_staff8_rating').value;
+                const staff9_rating = document.getElementById('edit_staff9_rating').value;
+                const staff10_rating = document.getElementById('edit_staff10_rating').value;
+                const feedback = document.getElementById('edit_feedback').value;
 
-    fetch(`/api/feedback/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ satisfaction, recommend, staff1_rating, staff2_rating, staff3_rating, feedback })
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            loadFeedbackData(); // Refresh data after update
-            closeEditModal();
-            alert('Feedback updated successfully!');
-        } else {
-            throw new Error(result.message || 'Server update failed');
-        }
-    })
-    .catch(error => {
-        console.error('Error updating feedback:', error);
-        alert('Error updating feedback.');
-    });
-};
-                    
-                    
+                fetch(`/api/feedback/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        satisfaction, 
+                        recommend, 
+                        staff1_rating, 
+                        staff2_rating, 
+                        staff3_rating, 
+                        staff4_rating, 
+                        staff5_rating, 
+                        staff6_rating, 
+                        staff7_rating, 
+                        staff8_rating, 
+                        staff9_rating, 
+                        staff10_rating, 
+                        feedback 
+                    })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        loadFeedbackData();
+                        closeEditModal();
+                        alert('Feedback updated successfully!');
+                    } else {
+                        throw new Error(result.message || 'Server update failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating feedback:', error);
+                    alert('Error updating feedback.');
+                });
+            };
             
             window.openDeleteModal = function(id) {
                 feedbackToDeleteId = id;
@@ -609,29 +712,30 @@
             };
             
             window.confirmDelete = function() {
-    if (feedbackToDeleteId === null) return;
-    
-    fetch(`/api/feedback/${feedbackToDeleteId}`, {
-        method: 'DELETE'
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            loadFeedbackData(); // Refresh data after delete
-            closeDeleteModal();
-            alert('Feedback deleted successfully!');
-        } else {
-            alert('Error deleting feedback.');
-        }
-    })
-    .catch(error => {
-        console.error('Error deleting feedback:', error);
-        alert('Error deleting feedback.');
-    });
-    
-    feedbackToDeleteId = null;
-};
+                if (feedbackToDeleteId === null) return;
+                
+                fetch(`/api/feedback/${feedbackToDeleteId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        loadFeedbackData();
+                        closeDeleteModal();
+                        alert('Feedback deleted successfully!');
+                    } else {
+                        alert('Error deleting feedback.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting feedback:', error);
+                    alert('Error deleting feedback.');
+                });
+                
+                feedbackToDeleteId = null;
+            };
         });
     </script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92538fcce88c457d',t:'MTc0Mjc5MTk3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>

@@ -143,77 +143,6 @@
             display: none;
             font-weight: bold;
         }
-        /* Admin Dashboard Styles */
-        .admin-dashboard {
-            display: none;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        .dashboard-title {
-            margin: 0;
-        }
-        .logout-btn {
-            background-color: #f44336;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        .logout-btn:hover {
-            background-color: #d32f2f;
-        }
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .stat-card {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        .feedback-list {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .feedback-header {
-            background-color: #f0f0f0;
-            padding: 12px 20px;
-            font-weight: bold;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-        }
-        .feedback-item {
-            padding: 15px 20px;
-            border-top: 1px solid #ddd;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-        }
-        .feedback-item:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
         /* Feedback Form Styles */
         .form-container {
             display: none;
@@ -276,39 +205,63 @@
             color: white;
         }
         .staff-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
-        }
-        .staff-member {
-            text-align: center;
-            padding: 15px;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            background: #f9f9f9;
-        }
-        .staff-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-            object-fit: cover;
-        }
-        .staff-name {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .staff-rating {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-        }
-        .staff-rating label {
-            font-weight: normal;
-            margin: 0;
-            cursor: pointer;
-        }
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+}
+.staff-member {
+    text-align: center;
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s ease-in-out;
+}
+
+.staff-member:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.staff-name {
+    font-weight: bold;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+}
+
+.staff-rating {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.staff-rating label {
+    font-weight: normal;
+    margin: 0;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: #f5f5f5;
+    transition: all 0.2s ease;
+}
+
+.staff-rating input[type="radio"]:checked + label {
+    background: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+.staff-rating label {
+        width: 24px;
+        height: 24px;
+    }
+
         .feedback-success-message {
             display: none;
             background-color: #dff0d8;
@@ -373,9 +326,6 @@
         </div>
     </div>
 
-    <!-- Admin Dashboard -->
-    
-
     <!-- Feedback Form -->
     <div id="feedbackForm" class="form-container">
         <h1>Massage Service Feedback Questionnaire  按摩服务反馈问卷</h1>
@@ -416,11 +366,10 @@
             </div>
 
             <div class="question-group">
-                <label>Please rate our staff member who assisted you:</label>
+                <label>Please rate our Therapists who assisted you:</label>
                 <div class="staff-container">
                     <div class="staff-member">
-                        <img src="http://localhost:3000/api/placeholder/100/100" alt="Sarah Johnson" class="staff-image">
-                        <div class="staff-name">Sarah Johnson</div>
+                        <div class="staff-name">Therapist 1</div>
                         <div class="rating staff-rating">
                             <input type="radio" name="staff1_rating" id="staff1_1" value="1" required>
                             <label for="staff1_1">1</label>
@@ -436,8 +385,7 @@
                     </div>
 
                     <div class="staff-member">
-                        <img src="http://localhost:3000/api/placeholder/100/100" alt="Michael Chen" class="staff-image">
-                        <div class="staff-name">Michael Chen</div>
+                        <div class="staff-name">Therapist 2</div>
                         <div class="rating staff-rating">
                             <input type="radio" name="staff2_rating" id="staff2_1" value="1" required>
                             <label for="staff2_1">1</label>
@@ -453,8 +401,7 @@
                     </div>
 
                     <div class="staff-member">
-                        <img src="http://localhost:3000/api/placeholder/100/100" alt="Emily Rodriguez" class="staff-image">
-                        <div class="staff-name">Emily Rodriguez</div>
+                        <div class="staff-name">Therapist 3</div>
                         <div class="rating staff-rating">
                             <input type="radio" name="staff3_rating" id="staff3_1" value="1" required>
                             <label for="staff3_1">1</label>
@@ -466,6 +413,118 @@
                             <label for="staff3_4">4</label>
                             <input type="radio" name="staff3_rating" id="staff3_5" value="5">
                             <label for="staff3_5">5</label>
+                        </div>
+                    </div>
+
+                    <div class="staff-member">
+                        <div class="staff-name">Therapist 4</div>
+                        <div class="rating staff-rating">
+                            <input type="radio" name="staff4_rating" id="staff4_1" value="1" required>
+                            <label for="staff4_1">1</label>
+                            <input type="radio" name="staff4_rating" id="staff4_2" value="2">
+                            <label for="staff4_2">2</label>
+                            <input type="radio" name="staff4_rating" id="staff4_3" value="3">
+                            <label for="staff4_3">3</label>
+                            <input type="radio" name="staff4_rating" id="staff4_4" value="4">
+                            <label for="staff4_4">4</label>
+                            <input type="radio" name="staff4_rating" id="staff4_5" value="5">
+                            <label for="staff4_5">5</label>
+                        </div>
+                    </div>
+
+                    <div class="staff-member">
+                        <div class="staff-name">Therapist 5</div>
+                        <div class="rating staff-rating">
+                            <input type="radio" name="staff5_rating" id="staff5_1" value="1" required>
+                            <label for="staff5_1">1</label>
+                            <input type="radio" name="staff5_rating" id="staff5_2" value="2">
+                            <label for="staff5_2">2</label>
+                            <input type="radio" name="staff5_rating" id="staff5_3" value="3">
+                            <label for="staff5_3">3</label>
+                            <input type="radio" name="staff5_rating" id="staff5_4" value="4">
+                            <label for="staff5_4">4</label>
+                            <input type="radio" name="staff5_rating" id="staff5_5" value="5">
+                            <label for="staff5_5">5</label>
+                        </div>
+                    </div>
+
+                    <div class="staff-member">
+                        <div class="staff-name">Therapist 6</div>
+                        <div class="rating staff-rating">
+                            <input type="radio" name="staff6_rating" id="staff6_1" value="1" required>
+                            <label for="staff6_1">1</label>
+                            <input type="radio" name="staff6_rating" id="staff6_2" value="2">
+                            <label for="staff6_2">2</label>
+                            <input type="radio" name="staff6_rating" id="staff6_3" value="3">
+                            <label for="staff6_3">3</label>
+                            <input type="radio" name="staff6_rating" id="staff6_4" value="4">
+                            <label for="staff6_4">4</label>
+                            <input type="radio" name="staff6_rating" id="staff6_5" value="5">
+                            <label for="staff6_5">5</label>
+                        </div>
+                    </div>
+
+                    <div class="staff-member">
+                        <div class="staff-name">Therapist 7</div>
+                        <div class="rating staff-rating">
+                            <input type="radio" name="staff7_rating" id="staff7_1" value="1" required>
+                            <label for="staff7_1">1</label>
+                            <input type="radio" name="staff7_rating" id="staff7_2" value="2">
+                            <label for="staff7_2">2</label>
+                            <input type="radio" name="staff7_rating" id="staff7_3" value="3">
+                            <label for="staff7_3">3</label>
+                            <input type="radio" name="staff7_rating" id="staff7_4" value="4">
+                            <label for="staff7_4">4</label>
+                            <input type="radio" name="staff7_rating" id="staff7_5" value="5">
+                            <label for="staff7_5">5</label>
+                        </div>
+                    </div>
+
+                    <div class="staff-member">
+                        <div class="staff-name">Therapist 8</div>
+                        <div class="rating staff-rating">
+                            <input type="radio" name="staff8_rating" id="staff8_1" value="1" required>
+                            <label for="staff8_1">1</label>
+                            <input type="radio" name="staff8_rating" id="staff8_2" value="2">
+                            <label for="staff8_2">2</label>
+                            <input type="radio" name="staff8_rating" id="staff8_3" value="3">
+                            <label for="staff8_3">3</label>
+                            <input type="radio" name="staff8_rating" id="staff8_4" value="4">
+                            <label for="staff8_4">4</label>
+                            <input type="radio" name="staff8_rating" id="staff8_5" value="5">
+                            <label for="staff8_5">5</label>
+                        </div>
+                    </div>
+
+                    <div class="staff-member">
+                        <div class="staff-name">Therapist 9</div>
+                        <div class="rating staff-rating">
+                            <input type="radio" name="staff9_rating" id="staff9_1" value="1" required>
+                            <label for="staff9_1">1</label>
+                            <input type="radio" name="staff9_rating" id="staff9_2" value="2">
+                            <label for="staff9_2">2</label>
+                            <input type="radio" name="staff9_rating" id="staff9_3" value="3">
+                            <label for="staff9_3">3</label>
+                            <input type="radio" name="staff9_rating" id="staff9_4" value="4">
+                            <label for="staff9_4">4</label>
+                            <input type="radio" name="staff9_rating" id="staff9_5" value="5">
+                            <label for="staff9_5">5</label>
+                        </div>
+                    </div>
+
+                    <div class="staff-member">
+                        <div class="staff-name">Therapist 10</div>
+                        <div class="rating staff-rating">
+                            <input type="radio" name="staff10_rating" id="staff10_1" value="1" required>
+                            <label for="staff10_1">1</label>
+                            <input type="radio" name="staff10_rating" id="staff10_2" value="2">
+                            <label for="staff10_2">2</label>
+                            <input type="radio" name="staff10_rating" id="staff10_3" value="3">
+                            <label for="staff10_3">3</label>
+                            <input type="radio" name="staff10_rating" id="staff10_4" value="4">
+                            <label for="staff10_4">4</label>
+                            <input type="radio" name="staff10_rating" id="staff10_5" value="5">
+                            <label for="staff10_5">5</label>
                         </div>
                     </div>
                 </div>
@@ -507,59 +566,38 @@
         }
 
         function handleAdminLogin(event) {
-    event.preventDefault();
-    const password = document.getElementById('password').value;
-    
-    if (password === "1234") {
-        // Show success message
-        document.getElementById('successMessage').style.display = 'block';
-        document.getElementById('errorMessage').style.display = 'none';
-        
-        // Redirect to admin.html after 1 second
-        setTimeout(function() {
-            window.location.href = '/admin.html';
-        }, 1000);
-    } else {
-        // Show error message
-        document.getElementById('errorMessage').style.display = 'block';
-        document.getElementById('successMessage').style.display = 'none';
-    }
-}
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            
+            if (password === "1234") {
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('errorMessage').style.display = 'none';
+                setTimeout(function() {
+                    window.location.href = '/admin.html';
+                }, 1000);
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
+            }
+        }
 
         // Function to logout from admin dashboard
         function logout() {
-    window.location.href = '/';
-}
+            window.location.href = '/';
+        }
 
         // Function to handle language change
         function changeLanguage(lang) {
-            // In a real application, you would implement language switching
             if (lang === 'zh') {
-                // Selection page translation
                 document.querySelector('#selectionPage h1').textContent = '欢迎来到按摩服务';
                 document.querySelector('.customer-btn').innerHTML = '<span class="icon">👤</span> 顾客';
                 document.querySelector('.admin-btn').innerHTML = '<span class="icon">👑</span> 管理员';
                 document.querySelector('.language-toggle span').textContent = 'Language/语言:';
-                
-                // Admin modal translation
                 document.querySelector('.modal-content h2').textContent = '管理员登录';
                 document.querySelector('label[for="password"]').textContent = '密码：';
                 document.querySelector('.login-btn').textContent = '登录';
                 document.getElementById('errorMessage').textContent = '密码错误。请重试。';
                 document.getElementById('successMessage').textContent = '访问已授权！加载仪表板...';
-                
-                // Dashboard elements
-                document.querySelector('.dashboard-title').textContent = '管理员仪表板 - 反馈管理';
-                document.querySelector('.logout-btn').textContent = '登出';
-                document.querySelectorAll('.stats-container .stat-card div:first-child')[0].textContent = '反馈总数';
-                document.querySelectorAll('.stats-container .stat-card div:first-child')[1].textContent = '平均评分';
-                document.querySelectorAll('.stats-container .stat-card div:first-child')[2].textContent = '推荐率';
-                document.querySelector('#adminDashboard h3').textContent = '最近反馈';
-                document.querySelectorAll('.feedback-header div')[0].textContent = '日期';
-                document.querySelectorAll('.feedback-header div')[1].textContent = '评分';
-                document.querySelectorAll('.feedback-header div')[2].textContent = '员工';
-                
-                // Feedback form translations
                 document.querySelector('#evaluationForm .question-group:nth-child(1) label').textContent = '您对我们的服务满意度如何？';
                 document.querySelector('#evaluationForm .question-group:nth-child(2) label').textContent = '您会向他人推荐我们的服务吗？';
                 document.querySelector('#evaluationForm .question-group:nth-child(2) .radio-option:nth-child(1) span').textContent = '是';
@@ -572,37 +610,21 @@
                 document.querySelector('#evaluationForm .back-button').textContent = '返回选择';
                 document.getElementById('feedbackSuccessMessage').textContent = '感谢您的反馈！您的回复已被记录。';
             } else {
-                // Selection page translation
                 document.querySelector('#selectionPage h1').textContent = 'Welcome to Massage Service';
                 document.querySelector('.customer-btn').innerHTML = '<span class="icon">👤</span> Customer';
                 document.querySelector('.admin-btn').innerHTML = '<span class="icon">👑</span> Administrator';
                 document.querySelector('.language-toggle span').textContent = 'Language/语言:';
-                
-                // Admin modal translation
                 document.querySelector('.modal-content h2').textContent = 'Administrator Login';
                 document.querySelector('label[for="password"]').textContent = 'Password:';
                 document.querySelector('.login-btn').textContent = 'Login';
                 document.getElementById('errorMessage').textContent = 'Wrong password. Please try again.';
                 document.getElementById('successMessage').textContent = 'Access granted! Loading dashboard...';
-                
-                // Dashboard elements
-                document.querySelector('.dashboard-title').textContent = 'Admin Dashboard - Feedback Management';
-                document.querySelector('.logout-btn').textContent = 'Logout';
-                document.querySelectorAll('.stats-container .stat-card div:first-child')[0].textContent = 'Total Feedbacks';
-                document.querySelectorAll('.stats-container .stat-card div:first-child')[1].textContent = 'Average Rating';
-                document.querySelectorAll('.stats-container .stat-card div:first-child')[2].textContent = 'Recommend Rate';
-                document.querySelector('#adminDashboard h3').textContent = 'Recent Feedback';
-                document.querySelectorAll('.feedback-header div')[0].textContent = 'Date';
-                document.querySelectorAll('.feedback-header div')[1].textContent = 'Rating';
-                document.querySelectorAll('.feedback-header div')[2].textContent = 'Staff Member';
-                
-                // Feedback form translations
                 document.querySelector('#evaluationForm .question-group:nth-child(1) label').textContent = 'How satisfied were you with our service?';
                 document.querySelector('#evaluationForm .question-group:nth-child(2) label').textContent = 'Would you recommend our service to others?';
                 document.querySelector('#evaluationForm .question-group:nth-child(2) .radio-option:nth-child(1) span').textContent = 'Yes';
                 document.querySelector('#evaluationForm .question-group:nth-child(2) .radio-option:nth-child(2) span').textContent = 'No';
                 document.querySelector('#evaluationForm .question-group:nth-child(2) .radio-option:nth-child(3) span').textContent = 'Maybe';
-                document.querySelector('#evaluationForm .question-group:nth-child(3) label').textContent = 'Please rate our staff member who assisted you:';
+                document.querySelector('#evaluationForm .question-group:nth-child(3) label').textContent = 'Please rate our staff members who assisted you:';
                 document.querySelector('#evaluationForm .question-group:nth-child(4) label').textContent = 'What could we do to improve our service?';
                 document.querySelector('#evaluationForm textarea').placeholder = 'Please share your thoughts...';
                 document.querySelector('#evaluationForm button[type="submit"]').textContent = 'Submit Evaluation';
@@ -621,49 +643,48 @@
 
         // Handle feedback form submission
         document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('evaluationForm');
-    const successMessage = document.getElementById('feedbackSuccessMessage');
-    
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        
-        // Collect form data
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData);
-        
-        // Submit to server
-        fetch('/api/feedback', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-})
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(response => {
-    console.log('Server response:', response.status, response.statusText);
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return response.json();
-})
-.then(result => {
-    console.log('Server result:', result);
-    if (result.success) {
-        // ... success logic ...
-    } else {
-        alert('Error from server: ' + (result.message || 'Unknown error'));
-    }
-})
-.catch(error => {
-    console.error('Fetch error:', error);
-    alert('There was an error submitting your feedback. Please try again.');
-});
-    });
-});
+            const form = document.getElementById('evaluationForm');
+            const successMessage = document.getElementById('feedbackSuccessMessage');
+            
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Collect form data
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+                
+                // Submit to server
+                fetch('/api/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    console.log('Server result:', result);
+                    if (result.success) {
+                        successMessage.style.display = 'block';
+                        form.reset();
+                        setTimeout(() => {
+                            successMessage.style.display = 'none';
+                            backToSelection();
+                        }, 5000);
+                    } else {
+                        alert('Error from server: ' + (result.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    alert('There was an error submitting your feedback. Please try again.');
+                });
+            });
+        });
     </script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'925387144c8706f8',t:'MTc0Mjc5MTYxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>

@@ -47,7 +47,19 @@ app.post('/api/feedback', async (req, res) => {
         let feedback = await readFeedback();
         const feedbackData = {
             id: feedback.length + 1, // Simple incremental ID
-            ...req.body,
+            satisfaction: req.body.satisfaction,
+            recommend: req.body.recommend,
+            staff1_rating: req.body.staff1_rating || "N/A", // Default to "N/A" if not provided
+            staff2_rating: req.body.staff2_rating || "N/A",
+            staff3_rating: req.body.staff3_rating || "N/A",
+            staff4_rating: req.body.staff4_rating || "N/A",
+            staff5_rating: req.body.staff5_rating || "N/A",
+            staff6_rating: req.body.staff6_rating || "N/A",
+            staff7_rating: req.body.staff7_rating || "N/A",
+            staff8_rating: req.body.staff8_rating || "N/A",
+            staff9_rating: req.body.staff9_rating || "N/A",
+            staff10_rating: req.body.staff10_rating || "N/A",
+            feedback: req.body.feedback || "",
             timestamp: new Date().toISOString()
         };
         feedback.push(feedbackData);
@@ -83,7 +95,19 @@ app.put('/api/feedback/:id', async (req, res) => {
 
         feedback[index] = {
             ...feedback[index],
-            ...req.body,
+            satisfaction: req.body.satisfaction,
+            recommend: req.body.recommend,
+            staff1_rating: req.body.staff1_rating || feedback[index].staff1_rating,
+            staff2_rating: req.body.staff2_rating || feedback[index].staff2_rating,
+            staff3_rating: req.body.staff3_rating || feedback[index].staff3_rating,
+            staff4_rating: req.body.staff4_rating || feedback[index].staff4_rating,
+            staff5_rating: req.body.staff5_rating || feedback[index].staff5_rating,
+            staff6_rating: req.body.staff6_rating || feedback[index].staff6_rating,
+            staff7_rating: req.body.staff7_rating || feedback[index].staff7_rating,
+            staff8_rating: req.body.staff8_rating || feedback[index].staff8_rating,
+            staff9_rating: req.body.staff9_rating || feedback[index].staff9_rating,
+            staff10_rating: req.body.staff10_rating || feedback[index].staff10_rating,
+            feedback: req.body.feedback || feedback[index].feedback,
             timestamp: feedback[index].timestamp // Preserve original timestamp
         };
         await writeFeedback(feedback);
