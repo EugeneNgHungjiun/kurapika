@@ -8,3 +8,4 @@ package-lock.json text eol=lf
 # Binary files should not have line ending conversion
 *.png binary
 *.jpg binary
+* text=auto eol=lf
