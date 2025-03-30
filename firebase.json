@@ -1,14 +1,12 @@
 {
-  "firestore": {
-    "rules": "firestone.rules",
-    "indexes": "firestore.indexes.json"
-  },
   "hosting": {
-    "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+    "public": ".",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "!/admin.html",
+        "destination": "/index.html"
+      }
     ]
   }
 }
